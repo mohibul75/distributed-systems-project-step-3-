@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  rating-api:
+    image: purbo7512/rating-api
+    restart: always
+
+  cmm-api:
+    image: purbo7512/cmm-api
+    restart: always
+
+  rs-api:
+    image: purbo7512/rs-api
+    restart: always
+
+  nginx:
+    build: ./nginx/
+    ports: ["8080:80"]
+    depends_on:
+      - rating-api
+      - cmm-api
+      - rs-api
+  mongodb:
+    image : mongo
+    container_name: mongodb
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - /home/purbo/mongodb/database:/data/db
+    ports:
+      - 27017:27017
+    restart: always
+
